@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin.html
+Disallow: /config.js
+Disallow: /api/
+
+Sitemap: https://www.fabfashionfabrics.com/sitemap.xml

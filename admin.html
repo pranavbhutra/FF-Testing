@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FabFashion Admin</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/x-icon" href="https://www.fabfashionfabrics.com/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="144x144" href="https://www.fabfashionfabrics.com/favicon.png" />
+  <link rel="apple-touch-icon" href="https://www.fabfashionfabrics.com/favicon.png" />
+  <link rel="stylesheet" href="style.css?v=17" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&amp;family=Montserrat:wght@300;400;500;600&amp;display=swap" rel="stylesheet" />
+  <style>
+    body { background: #f0ede8; }
+    #admin-dashboard { display: none; }
+  </style>
+</head>
+<body class="admin-body">
+
+<!-- ============================================================
+     LOGIN SCREEN
+     ============================================================ -->
+<div class="admin-login-screen" id="login-screen">
+  <div class="login-card">
+    <div class="logo-wrap">
+      <img src="images/logo.png" alt="FabFashion" title="FabFashion" />
+      <h2>Admin Portal</h2>
+      <p>FabFashion Internal Dashboard</p>
+    </div>
+    <form id="admin-login-form">
+      <div class="form-group">
+        <label for="admin-username">Username</label>
+        <input type="text" id="admin-username" name="username" placeholder="Enter username" autocomplete="username" required />
+      </div>
+      <div class="form-group">
+        <label for="admin-password">Password</label>
+        <input type="password" id="admin-password" name="password" placeholder="Enter password" autocomplete="current-password" required />
+      </div>
+      <p id="login-error" style="color:#c04040;font-size:0.82rem;margin-bottom:1rem;min-height:1.2rem;"></p>
+      <button type="submit" class="btn btn-gold" style="width:100%;">Sign In</button>
+    </form>
+    <p style="text-align:center;margin-top:1.5rem;">
+      <a href="/" style="font-size:0.8rem;color:var(--text-light);">← Back to Website</a>
+    </p>
+  </div>
+</div>
+
+<!-- ============================================================
+     ADMIN DASHBOARD
+     ============================================================ -->
+<div id="admin-dashboard">
+
+  <!-- Sidebar -->
+  <aside class="admin-sidebar">
+    <div class="admin-sidebar-logo">
+      <img src="images/logo.png" alt="FabFashion" title="FabFashion" />
+    </div>
+    <nav class="admin-nav">
+      <div class="admin-nav-item active" data-tab="inquiries" id="nav-inquiries">
+        <span class="nav-icon">✉️</span> Inquiries
+      </div>
+      <div class="admin-nav-item" data-tab="collections" id="nav-collections">
+        <span class="nav-icon">📦</span> Collections
+      </div>
+      <div class="admin-nav-item" data-tab="subscribers" id="nav-subscribers">
+        <span class="nav-icon">📧</span> Subscribers
+      </div>
+      <div class="admin-nav-item" data-tab="users" id="nav-users">
+        <span class="nav-icon">👥</span> Users
+      </div>
+      
+      <div class="admin-nav-item" data-tab="editlog" id="nav-editlog">
+        <span class="nav-icon">📋</span> Edit Log
+      </div>
+      <div class="admin-nav-item" data-tab="settings" id="nav-settings">
+        <span class="nav-icon">⚙️</span> Settings
+      </div>
+    </nav>
+    <div style="position:absolute;bottom:2rem;left:0;right:0;padding:0 1.5rem;">
+      <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);margin-bottom:0.75rem;">Signed in as</p>
+      <p id="current-user" style="font-size:0.85rem;color:var(--gold-light);font-weight:600;margin-bottom:1rem;"></p>
+      <button id="logout-btn" class="btn btn-outline-gold btn-sm" style="width:100%;justify-content:center;">Sign Out</button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="admin-main">
+
+    <!-- Stats Row (always visible) -->
+    <div class="admin-stats-row" id="admin-stats-row">
+      <div class="admin-stat-card">
+        <div class="stat-val" id="stat-inquiries">0</div>
+        <div class="stat-lbl">Total Enquiries</div>
+      </div>
+      <div class="admin-stat-card">
+        <div class="stat-val" id="stat-unread">0</div>
+        <div class="stat-lbl">Unread Enquiries</div>
+      </div>
+      <div class="admin-stat-card">
+        <div class="stat-val" id="stat-collections">6</div>
+        <div class="stat-lbl">Fabric Listings</div>
+      </div>
+      <div class="admin-stat-card">
+        <div class="stat-val" id="stat-subscribers">0</div>
+        <div class="stat-lbl">Subscribers</div>
+      </div>
+      <div class="admin-stat-card">
+        <div class="stat-val" id="stat-users">1</div>
+        <div class="stat-lbl">Admin Users</div>
+      </div>
+    </div>
+
+    <!-- ========================
+         TAB: INQUIRIES
+         ======================== -->
+    <div class="admin-tab active" id="tab-inquiries">
+      <div class="admin-header">
+        <h1>Enquiries</h1>
+        <span style="font-size:0.82rem;color:var(--text-light);">All contact form submissions</span>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Company</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Message</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="inquiries-tbody">
+            <tr><td colspan="8" style="text-align:center;color:var(--text-light);padding:2rem;">No enquiries yet.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ========================
+         TAB: COLLECTIONS
+         ======================== -->
+    <div class="admin-tab" id="tab-collections">
+      <div class="admin-header">
+        <h1>Fabric Collections</h1>
+        <button class="btn btn-gold btn-sm" onclick="adminAddCollection()" id="add-collection-btn">+ Add Fabric</button>
+      </div>
+      <div class="add-btn-row"></div>
+      <div style="overflow-x:auto;">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Name</th>
+              <th>Category</th>
+              <th>Composition</th>
+              <th>Weight</th>
+              <th>Price Label</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="collections-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ========================
+         TAB: SUBSCRIBERS
+         ======================== -->
+    <div class="admin-tab" id="tab-subscribers">
+      <div class="admin-header" style="display:flex; justify-content:space-between; align-items:center;">
+        <h1>Newsletter Subscribers</h1>
+        <button class="btn btn-gold btn-sm" onclick="exportSubscribersToExcel()">Export to Excel</button>
+      </div>
+      <div class="admin-card">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Email Address</th>
+              <th style="width:100px;text-align:right;">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="subscribers-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ========================
+         TAB: USERS
+         ======================== -->
+    <div class="admin-tab" id="tab-users">
+      <div class="admin-header">
+        <h1>Admin Users</h1>
+        <button class="btn btn-gold btn-sm" onclick="adminAddUser()" id="add-user-btn">+ Add User</button>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Username</th>
+              <th>Role</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="users-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ========================
+         TAB: EDIT LOG
+         ======================== -->
+    <div class="admin-tab" id="tab-editlog">
+      <div class="admin-header">
+        <h1>Edit Log</h1>
+        <button class="btn btn-sm" style="border:1.5px solid #c04040;color:#c04040;border-radius:60px;padding:0.5rem 1.25rem;font-size:0.75rem;font-weight:600;" onclick="adminClearLog()" id="clear-log-btn">Clear Log</button>
+      </div>
+      <div id="edit-log-list"></div>
+    </div>
+
+    <!-- ========================
+         TAB: SETTINGS
+         ======================== -->
+    <div class="admin-tab" id="tab-settings">
+      <div class="admin-header">
+        <h1>Site Settings</h1>
+      </div>
+      <div class="admin-card" style="max-width:600px; margin-top:2rem;">
+        <h3 style="margin-bottom:1rem; color:var(--primary-gold);">Golden Stripe Marquee</h3>
+        <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:1.5rem;">Enter the phrases you want to scroll across the homepage, separated by commas.</p>
+        <div class="form-group">
+          <input type="text" id="setting-marquee" placeholder="e.g. Poplin, Twill, Custom Weaves" style="width:100%;" />
+        </div>
+        <button class="btn btn-gold" id="save-settings-btn" style="padding:0.6rem 1.5rem;font-size:0.9rem;">Save Settings</button>
+      </div>
+    </div>
+
+      <!-- TESTIMONIALS PANE -->
+    <div class="admin-tab" id="tab-testimonials">
+      <div class="pane-header">
+        <h2>Manage Testimonials</h2>
+        <button class="btn btn-gold btn-sm" onclick="adminAddTestimonial()">+ Add Testimonial</button>
+      </div>
+      <div class="table-container">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Quote</th>
+              <th>Author (Optional)</th>
+              <th>Company (Optional)</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="admin-testimonials-tbody">
+            <!-- Populated by JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+    </main>
+</div>
+
+<!-- ============================================================
+     MODAL: FABRIC COLLECTION
+     ============================================================ -->
+<div class="modal-backdrop" id="collection-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('collection-modal')" aria-label="Close">&times;</button>
+    <h3 id="collection-modal-title">Add Fabric</h3>
+    <form id="collection-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="col-name">Fabric Name *</label>
+          <input type="text" id="col-name" placeholder="e.g. Oxford Weave" required />
+        </div>
+        <div class="form-group">
+            <label for="col-category">Category *</label>
+            <select id="col-category">
+              <option value="cotton">Cotton</option>
+              <option value="linen">Linen</option>
+              <option value="blends">Blends</option>
+              <option value="custom">Custom</option>
+              <option value="__new__">+ Add New Category...</option>
+            </select>
+            <div id="new-category-wrapper" style="display:none; margin-top:0.5rem; display:flex; gap:0.5rem;">
+              <input type="text" id="new-category-input" placeholder="New Category Name" style="flex:1;" />
+              <button type="button" class="btn btn-gold btn-sm" id="btn-add-category">Add</button>
+            </div>
+          </div>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
+          <div class="form-group">
+            <label for="col-composition">Composition</label>
+            <input type="text" id="col-composition" placeholder="e.g. 100% Cotton" />
+          </div>
+          <div class="form-group">
+            <label for="col-weight">Weight (GSM)</label>
+            <input type="text" id="col-weight" placeholder="e.g. 110-130 GSM" />
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
+          <div class="form-group">
+            <label for="col-uses">Best For</label>
+            <input type="text" id="col-uses" placeholder="e.g. Shirting, Dresses" />
+          </div>
+          <div class="form-group">
+            <label for="col-finish">Finish</label>
+            <input type="text" id="col-finish" placeholder="e.g. Soft, Mercerized" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="col-desc">Description</label>
+          <textarea id="col-desc" style="min-height:80px;" placeholder="Fabric description..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Available Colors</label>
+          <div id="col-colors-container" style="display:flex; flex-direction:column; gap:0.5rem; margin-bottom:0.5rem;">
+            <!-- Inputs injected by JS -->
+          </div>
+          <button type="button" class="btn btn-outline-gold btn-sm" onclick="addAdminColorInput()" style="padding:0.4rem 0.8rem; font-size:0.8rem;">+ Add Color</button>
+        </div>
+      <div class="form-group">
+        <label for="col-image">Upload Image</label>
+        <input type="file" id="col-image" accept="image/png, image/jpeg, image/webp" />
+        <small style="color:var(--text-light);display:block;margin-top:0.25rem;" id="col-image-hint"></small>
+      </div>
+      <div class="form-group">
+        <label for="col-price">Price Label</label>
+        <input type="text" id="col-price" placeholder="e.g. ? Contact for Pricing" />
+      </div>
+              <div class="form-row" style="margin-top:1rem; margin-bottom:1.5rem;">
+          <div class="form-group" style="display:flex; align-items:center; gap:0.75rem;">
+            <input type="checkbox" id="col-gallery" style="width:1.25rem; height:1.25rem; margin:0;" />
+            <label for="col-gallery" style="margin:0; cursor:pointer;">Show in Gallery</label>
+          </div>
+          <div class="form-group" style="display:flex; align-items:center; gap:0.75rem;">
+            <input type="checkbox" id="col-launched" style="width:1.25rem; height:1.25rem; margin:0;" />
+            <label for="col-launched" style="margin:0; cursor:pointer;">Show in Just Launched</label>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-gold" style="width:100%;">Save Fabric</button>
+    </form>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODAL: USER
+     ============================================================ -->
+<div class="modal-backdrop" id="user-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('user-modal')" aria-label="Close">&times;</button>
+    <h3 id="user-modal-title">Add User</h3>
+    <form id="user-form">
+      <div class="form-group">
+        <label for="user-username">Username *</label>
+        <input type="text" id="user-username" placeholder="Enter username" required />
+      </div>
+      <div class="form-group">
+        <label for="user-password">Password *</label>
+        <input type="password" id="user-password" placeholder="Enter password" required />
+      </div>
+      <div class="form-group">
+        <label for="user-role">Role</label>
+        <select id="user-role">
+          <option value="admin">Admin</option>
+          <option value="editor">Editor</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-gold" style="width:100%;">Save User</button>
+    </form>
+  </div>
+</div>
+
+<!-- Limit Replacement Modal -->
+<div class="modal-backdrop" id="limit-modal">
+  <div class="modal">
+    <h3 id="limit-modal-title">Limit Reached</h3>
+    <p id="limit-modal-desc" style="margin-bottom:1rem; color:var(--text-light); font-size:0.9rem;"></p>
+    <div id="limit-modal-list" style="max-height:250px; overflow-y:auto; margin-bottom:1.5rem;"></div>
+    <div style="display:flex; gap:1rem;">
+      <button class="btn btn-outline-gold" style="flex:1;" onclick="cancelLimitReplacement()">Cancel</button>
+      <button class="btn btn-gold" style="flex:1;" onclick="confirmLimitReplacement()">Replace</button>
+    </div>
+  </div>
+</div>
+
+<!-- Testimonial Modal -->
+<div class="modal-backdrop" id="testimonial-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('testimonial-modal')">&times;</button>
+    <h3 id="testimonial-modal-title">Add Testimonial</h3>
+    <form id="testimonial-form" onsubmit="return adminSaveTestimonial(event)">
+      <div class="form-group">
+        <label for="test-quote">Quote *</label>
+        <textarea id="test-quote" style="min-height:80px;" placeholder="What our partners say..." required></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="test-author">Author (Optional)</label>
+          <input type="text" id="test-author" placeholder="e.g. Rajesh Mehta" />
+        </div>
+        <div class="form-group">
+          <label for="test-company">Company (Optional)</label>
+          <input type="text" id="test-company" placeholder="e.g. Apex Garments" />
+        </div>
+      </div>
+      <button type="submit" class="btn btn-gold" style="width:100%;">Save Testimonial</button>
+    </form>
+  </div>
+</div>
+
+<!-- Toast Container -->
+
+
+<!-- PRIVACY POLICY MODAL -->
+<div class="modal-backdrop" id="privacy-modal">
+  <div class="modal" style="max-width: 800px; padding: 2rem;">
+    <button class="modal-close" onclick="closeModal('privacy-modal')" aria-label="Close">&times;</button>
+    <h3 id="privacy-modal-title">Privacy Policy</h3>
+    <div style="color: var(--text); font-size: 0.9rem; line-height: 1.6;">
+      <p style="margin-bottom: 1rem; color: var(--text-light);"><strong>Last Updated:</strong> June 2026</p>
+
+      <h4 style="color: var(--gold-dark); margin-top: 1.5rem; margin-bottom: 0.5rem;">1. Introduction</h4>
+      <p style="margin-bottom: 1rem;">Welcome to FabFashion ("we," "us," "our"), operated by FabFashion, a premium fabric manufacturing and export business headquartered at Office No 402, Ajmera Midtown, Popatwadi Corner, Kalbadevi Road, Mumbai - 400002, India.</p>
+      <p style="margin-bottom: 1rem;">We are committed to protecting your personal data and respecting your privacy in accordance with the Digital Personal Data Protection (DPDP) Act, 2023. This policy explains what data we collect, how it is used, who we share it with, and your rights as a Data Principal regarding your digital personal data.</p>
+      <p style="margin-bottom: 1rem;">By submitting a form on our website, you consent to the collection and use of your information as described in this policy.</p>
+
+      <h4 style="color: var(--gold-dark); margin-top: 1.5rem; margin-bottom: 0.5rem;">2. Data Collection & Purpose</h4>
+      <p style="margin-bottom: 0.5rem;">We collect the following information only when you explicitly consent via our forms:</p>
+      <ul style="list-style: disc; margin-left: 1.5rem; margin-bottom: 1rem;">
+        <li><strong>Name, Company, and Phone Number</strong> &mdash; used to respond to your manufacturing and export inquiries.</li>
+        <li><strong>Email Address</strong> &mdash; used for direct communication regarding your inquiries and to send our newsletter (if opted in).</li>
+        <li><strong>Inquiry Details</strong> &mdash; used solely to understand your fabric requirements and prepare quotations or samples.</li>
+      </ul>
+      <p style="margin-bottom: 1rem;">We do not use your data for hidden tracking, behavioral profiling, or unsolicited third-party marketing.</p>
+
+      <h5 style="font-size: 1rem; margin-top: 1.5rem; margin-bottom: 0.5rem;">Cookies & Website Technologies</h5>
+      <p style="margin-bottom: 1rem;">Our website loads fonts via Google Fonts and may use minimal functional cookies necessary for the site to operate correctly. We do not deploy advertising or behavioral-tracking cookies. If this changes in the future, this policy will be updated and, where required by law, your consent will be sought.</p>
+
+      <h4 style="color: var(--gold-dark); margin-top: 1.5rem; margin-bottom: 0.5rem;">3. Children's Data</h4>
+      <p style="margin-bottom: 1rem;">FabFashion provides B2B textile manufacturing services and does not intend to serve individuals under 18 years of age. Our inquiry forms include a self-declaration age confirmation step before submission. If we discover that personal data of a minor has been collected, it will be deleted immediately upon discovery, and we will take reasonable steps to cease further processing.</p>
+
+      <h4 style="color: var(--gold-dark); margin-top: 1.5rem; margin-bottom: 0.5rem;">4. Data Processors & Cross-Border Transfer</h4>
+      <p style="margin-bottom: 1rem;">We share data strictly on a need-to-know basis with authorized Data Processors to operate our website. Enquiry and subscriber records are stored in a Supabase-managed database accessible only to authorized FabFashion staff through a password-protected admin panel. We also use FormSubmit, a third-party form processing service, to send a copy of your inquiry as an email notification to our sales inbox.</p>
+      <p style="margin-bottom: 1rem;">FormSubmit's infrastructure may process and transmit data through servers located outside India. Where your personal data is transferred outside India for this purpose, we ensure it is handled under contractual safeguards consistent with the DPDP Act, 2023, and only for the limited purpose of delivering your inquiry to us.</p>
+      <p style="margin-bottom: 1rem;">We do not sell, rent, or trade your personal data to any third party for marketing purposes.</p>
+
+      <h4 style="color: var(--gold-dark); margin-top: 1.5rem; margin-bottom: 0.5rem;">5. Data Retention & Erasure</h4>
+      <p style="margin-bottom: 1rem;">When you submit a form, your information is saved to our Supabase database and a copy is emailed to us via FormSubmit. Certain non-sensitive preference data (such as cookie consent status) may also be stored locally in your browser to remember your choices on return visits &mdash; this local data never leaves your device and is not accessible to us.</p>
+      <p style="margin-bottom: 1rem;">We retain inquiry records in our database for as long as needed to respond to and service your enquiry, or for as long as we have an active business relationship with you. We do not currently operate an automated deletion schedule; records are removed manually once no longer needed, or immediately upon a valid erasure request to our Grievance Officer (Section 7).</p>
+
+      <h4 style="color: var(--gold-dark); margin-top: 1.5rem; margin-bottom: 0.5rem;">6. Your Data Rights</h4>
+      <p style="margin-bottom: 0.5rem;">Under the DPDP Act, 2023, you have the following rights as a Data Principal:</p>
+      <ul style="list-style: disc; margin-left: 1.5rem; margin-bottom: 1rem;">
+        <li><strong>Right to Information</strong> &mdash; You may request a summary of the personal data we hold about you and how it is being processed.</li>
+        <li><strong>Right to Correction & Erasure</strong> &mdash; You may request corrections to inaccurate or incomplete data, or the deletion of your data entirely, subject to our legal retention obligations.</li>
+        <li><strong>Right to Withdraw Consent</strong> &mdash; Where you have given consent (e.g. for our newsletter), you may withdraw it at any time, as easily as it was given, by emailing us at the address below.</li>
+        <li><strong>Right to Nominate</strong> &mdash; You may nominate another individual to exercise your rights on your behalf in the event of your death or incapacity.</li>
+        <li><strong>Right to Grievance Redressal</strong> &mdash; You have the right to file a complaint regarding the processing of your data, as outlined in Section 7 below.</li>
+      </ul>
+      <p style="margin-bottom: 1rem;">To exercise any of these rights, please contact our Grievance Officer using the details in Section 7.</p>
+
+      <h4 style="color: var(--gold-dark); margin-top: 1.5rem; margin-bottom: 0.5rem;">7. Grievance Officer</h4>
+      <p style="margin-bottom: 1rem;">In compliance with the DPDP Act, 2023, we have appointed a Grievance Officer to address any concerns regarding your personal data. We commit to acknowledging all grievances within 24 hours and resolving them within 30 days.</p>
+      <p style="margin-bottom: 1rem;"><strong>Grievance Officer</strong><br>Pranav Bhutra<br>FabFashion<br>Email: fabfashionfabrics@gmail.com<br>Phone: +91 82089 90130</p>
+      <p style="margin-bottom: 1rem;">If you are not satisfied with the resolution provided by our Grievance Officer, you have the right to escalate your complaint to the <strong>Data Protection Board of India</strong>, as established under the DPDP Act, 2023.</p>
+
+      <h4 style="color: var(--gold-dark); margin-top: 1.5rem; margin-bottom: 0.5rem;">8. Data Breach Response</h4>
+      <p style="margin-bottom: 1rem;">In the unlikely event of a personal data breach affecting your information, we will take reasonable steps to contain and assess the breach, and will notify the Data Protection Board of India and affected Data Principals as required under the DPDP Act, 2023, including the nature of the data affected, likely consequences, and remediation steps taken.</p>
+
+      <h4 style="color: var(--gold-dark); margin-top: 1.5rem; margin-bottom: 0.5rem;">9. Changes to This Policy</h4>
+      <p style="margin-bottom: 1rem;">We may update this Privacy Policy from time to time to reflect changes in our practices or legal requirements. The "Last Updated" date at the top of this page will reflect the most recent revision. Continued use of our website after changes are posted constitutes acceptance of the revised policy.</p>
+    </div>
+  </div>
+</div>
+
+<!-- DATA RIGHTS MODAL -->
+<div class="modal-backdrop" id="data-rights-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('data-rights-modal')" aria-label="Close">&times;</button>
+    <h3 id="data-rights-title">Your Data Privacy & Rights</h3>
+    <div style="color: var(--text);">
+      <p style="margin-bottom: 1rem; font-size: 0.9rem; color: var(--text-light);">Under the DPDP Act 2023, you have the right to know what personal data is stored about you, and the right to erase it. Your enquiry and subscription records are stored in our Supabase database — to request access, correction, or deletion of that data, please contact our Grievance Officer (see our Privacy Policy). The section below only covers non-sensitive preference data stored locally in this browser, such as your cookie consent choice.</p>
+      
+      <div style="background: rgba(201,168,76,0.05); padding: 1.25rem; border-radius: 8px; border: 1px solid rgba(201,168,76,0.2); margin-bottom: 1.5rem;">
+        <h4 style="margin-bottom: 0.75rem; color: var(--gold-dark); font-size: 1rem;">Data Currently Stored on Your Device:</h4>
+        <ul id="data-rights-list" style="list-style: none; font-size: 0.9rem; padding-left: 0; line-height: 1.6; color: var(--text);">
+          <!-- Populated by JS -->
+        </ul>
+      </div>
+
+      <p style="margin-bottom: 1.5rem; font-size: 0.85rem; color: #e74c3c; line-height: 1.5;">Clicking "Erase All My Data" will immediately delete non-sensitive local browser data such as your cookie consent choice and any unsynced draft data cached on this device. It does not delete enquiry or subscriber records already saved to our Supabase database — for that, please contact our Grievance Officer.</p>
+
+      <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;">
+        <button class="btn btn-outline" onclick="closeModal('data-rights-modal')" style="color: var(--text); border-color: rgba(0,0,0,0.2);">Cancel</button>
+        <button class="btn btn-gold" onclick="eraseAllMyData()" style="background: #e74c3c; border-color: #e74c3c; color: white;">Erase All My Data</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+<script src="config.js" defer></script>
+<script src="app.js?v=10"></script>
+</body>
+</html>
+

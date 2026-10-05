@@ -1,0 +1,9 @@
+# Backups & Archives
+*.zip
+FabFashion_Live_Site/
+archive_old_files/
+
+# OS / Editor junk
+.DS_Store
+Thumbs.db
+archive_old_files/
