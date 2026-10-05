@@ -1980,3 +1980,12 @@ img {
 .accordion-header {
   background: none;
 }
+
+/* --- Image Fallback & Clean Loading Hygiene --- */
+img {
+  overflow: hidden;
+}
+img.director-avatar {
+  color: transparent;
+  font-size: 0;
+}
